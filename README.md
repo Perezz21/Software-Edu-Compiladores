@@ -83,7 +83,3 @@ Resposta esperada:
 ```json
 {"message":"Hello, World!"}
 ```
-
-## Compartilhamento com o professor
-
-O repositório deve permanecer privado. No GitHub, adicione o usuário `rocha3runo` como colaborador do projeto para que ele possa acompanhar a evolução.

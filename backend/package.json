@@ -1,0 +1,21 @@
+{
+  "name": "compiladores-educacional-backend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "tsx src/server.ts"
+  },
+  "dependencies": {
+    "cors": "latest",
+    "express": "latest",
+    "tsx": "latest",
+    "typescript": "latest"
+  },
+  "devDependencies": {
+    "@types/cors": "latest",
+    "@types/express": "latest",
+    "@types/node": "latest"
+  }
+}

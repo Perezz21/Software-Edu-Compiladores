@@ -75,7 +75,7 @@ docker compose down
 A página é organizada em três áreas:
 
 1. **Exemplos:** carrega um dos três programas disponíveis. O exemplo selecionado pode ser alterado depois.
-2. **Código-fonte em C:** permite escrever, colar ou editar o código que será enviado ao servidor.
+2. **Código-fonte em C:** permite escrever, colar ou editar o código que será enviado ao servidor. O editor exibe numeração de linhas dinâmica e cores visuais para palavras-chave, números e operadores.
 3. **Resultado:** apresenta mensagens de validação, confirmação de recebimento ou falhas de comunicação.
 
 Para usar:
@@ -84,6 +84,8 @@ Para usar:
 2. Revise ou modifique o conteúdo no campo de código.
 3. Clique em **Solicitar análise**.
 4. Consulte a resposta na área **Resultado**.
+
+A coloração do editor é somente um recurso de apresentação. Ela não substitui a análise léxica, que permanece fora do escopo desta versão.
 
 ### Exemplos disponíveis
 
@@ -128,6 +130,7 @@ Os testes cobrem os principais comportamentos implementados nesta etapa:
 - validação de entrada vazia;
 - envio do código pelo frontend;
 - falha de comunicação;
+- numeração de linhas dinâmica;
 - endpoint de recebimento, entradas inválidas e regressão do endpoint `/api/hello`.
 
 Execute os testes em terminais separados:

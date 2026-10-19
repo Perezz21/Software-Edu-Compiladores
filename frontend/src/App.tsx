@@ -145,7 +145,7 @@ export default function App() {
 
           <form onSubmit={submitCode}>
             <label className="sr-only" htmlFor="code">
-              Código-fonte em C
+              Editor de código-fonte em C
             </label>
             <div className="code-editor">
               <div className="line-numbers" aria-hidden="true">

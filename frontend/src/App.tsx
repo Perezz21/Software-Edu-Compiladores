@@ -75,17 +75,16 @@ export default function App() {
       const data = (await response.json()) as ApiResponse;
 
       if (!response.ok) {
-        throw new Error(data.message);
+        setResult({ type: "error", message: data.message });
+        return;
       }
 
       setResult({ type: "success", message: data.message });
-    } catch (error) {
-      const message =
-        error instanceof Error && error.message
-          ? error.message
-          : "Não foi possível comunicar com o servidor. Verifique a conexão e tente novamente.";
-
-      setResult({ type: "error", message });
+    } catch {
+      setResult({
+        type: "error",
+        message: "Não foi possível comunicar com o servidor. Verifique a conexão e tente novamente."
+      });
     } finally {
       setIsSubmitting(false);
     }

@@ -5,6 +5,19 @@ import App from "./App";
 
 afterEach(() => {
   vi.restoreAllMocks();
+  it("atualiza a numeração conforme as linhas digitadas", () => {
+    const { container } = render(<App />);
+
+    fireEvent.change(screen.getByLabelText("Editor de código-fonte em C"), {
+      target: { value: "int primeiro = 1;\nint segundo = 2;" }
+    });
+
+    const lines = container.querySelectorAll(".line-numbers span");
+    expect(lines).toHaveLength(2);
+    expect(lines[0]).toHaveTextContent("1");
+    expect(lines[1]).toHaveTextContent("2");
+  });
+
 });
 
 describe("App", () => {

@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, ReactNode, useState } from "react";
 
 type ApiResponse = {
   message: string;
@@ -36,18 +36,51 @@ const examples = [
   }
 ];
 
+const tokenPattern =
+  /(\/\/[^\n]*|"(?:\\.|[^"\\])*"|#\s*include\b|\b(?:int|return)\b|\b\d+\b|[+\-*/=;(){}])/g;
+
+function getTokenClassName(token: string) {
+  if (token.startsWith("//")) return "token-comment";
+  if (token.startsWith('"')) return "token-string";
+  if (token.startsWith("#")) return "token-directive";
+  if (/^(int|return)$/.test(token)) return "token-keyword";
+  if (/^\d+$/.test(token)) return "token-number";
+  return "token-operator";
+}
+
+function highlightCode(code: string) {
+  const nodes: ReactNode[] = [];
+  let lastIndex = 0;
+
+  for (const match of code.matchAll(tokenPattern)) {
+    const index = match.index ?? 0;
+
+    if (index > lastIndex) {
+      nodes.push(code.slice(lastIndex, index));
+    }
+
+    nodes.push(
+      <span className={getTokenClassName(match[0])} key={`${index}-${match[0]}`}>
+        {match[0]}
+      </span>
+    );
+    lastIndex = index + match[0].length;
+  }
+
+  nodes.push(code.slice(lastIndex));
+  return nodes;
+}
+
 export default function App() {
   const [code, setCode] = useState("");
   const [selectedExample, setSelectedExample] = useState("");
+  const [editorScroll, setEditorScroll] = useState({ left: 0, top: 0 });
   const [result, setResult] = useState<Result>({
     type: "info",
     message: "Escolha um exemplo ou escreva um código C para começar."
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const lineNumbers = Array.from(
-    { length: Math.max(code.split("\n").length, 8) },
-    (_, index) => index + 1
-  );
+  const lineNumbers = Array.from({ length: code.split("\n").length }, (_, index) => index + 1);
 
   function loadExample(exampleId: string) {
     const example = examples.find((item) => item.id === exampleId);
@@ -149,23 +182,45 @@ export default function App() {
             </label>
             <div className="code-editor">
               <div className="line-numbers" aria-hidden="true">
-                {lineNumbers.map((line) => (
-                  <span key={line}>{line}</span>
-                ))}
+                <div style={{ transform: `translateY(${-editorScroll.top}px)` }}>
+                  {lineNumbers.map((line) => (
+                    <span key={line}>{line}</span>
+                  ))}
+                </div>
               </div>
-              <textarea
-                id="code"
-                value={code}
-                onChange={(event) => setCode(event.target.value)}
-                placeholder="Exemplo: int numero = 10;"
-                spellCheck="false"
-                rows={12}
-              />
+              <div className="code-surface">
+                <pre
+                  className="syntax-preview"
+                  aria-hidden="true"
+                  style={{
+                    transform: `translate(${-editorScroll.left}px, ${-editorScroll.top}px)`
+                  }}
+                >
+                  {highlightCode(code || " ")}
+                </pre>
+                <textarea
+                  id="code"
+                  className="syntax-input"
+                  value={code}
+                  onChange={(event) => setCode(event.target.value)}
+                  onScroll={(event) =>
+                    setEditorScroll({
+                      left: event.currentTarget.scrollLeft,
+                      top: event.currentTarget.scrollTop
+                    })
+                  }
+                  placeholder="Exemplo: int numero = 10;"
+                  spellCheck="false"
+                  wrap="off"
+                  rows={12}
+                />
+              </div>
             </div>
 
             <p className="editor-note">
-              Nesta etapa, o código é recebido e validado. A análise léxica e sintática
-              será desenvolvida nas próximas etapas.
+              As cores são apenas um recurso visual do editor. Nesta etapa, o código é
+              recebido e validado; a análise léxica e sintática será desenvolvida nas
+              próximas etapas.
             </p>
 
             <button className="primary-button" type="submit" disabled={isSubmitting}>

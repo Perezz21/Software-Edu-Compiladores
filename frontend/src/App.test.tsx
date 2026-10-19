@@ -17,7 +17,7 @@ describe("App", () => {
     expect(
       screen.getByRole("button", { name: /Declaração de variável/i })
     ).toBeInTheDocument();
-    expect(screen.getByLabelText("Código-fonte em C")).toBeInTheDocument();
+    expect(screen.getByLabelText("Editor de código-fonte em C")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Solicitar análise" })).toBeInTheDocument();
   });
 
@@ -27,7 +27,7 @@ describe("App", () => {
 
     await user.click(screen.getByRole("button", { name: /Operação aritmética/i }));
 
-    expect(screen.getByLabelText("Código-fonte em C")).toHaveValue(
+    expect(screen.getByLabelText("Editor de código-fonte em C")).toHaveValue(
       "int resultado = 10 + 5;"
     );
   });
@@ -54,7 +54,7 @@ describe("App", () => {
     vi.stubGlobal("fetch", fetchMock);
 
     render(<App />);
-    fireEvent.change(screen.getByLabelText("Código-fonte em C"), {
+    fireEvent.change(screen.getByLabelText("Editor de código-fonte em C"), {
       target: { value: "int numero = 10;" }
     });
     fireEvent.click(screen.getByRole("button", { name: "Solicitar análise" }));
@@ -77,7 +77,7 @@ describe("App", () => {
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("Falha de rede")));
 
     render(<App />);
-    fireEvent.change(screen.getByLabelText("Código-fonte em C"), {
+    fireEvent.change(screen.getByLabelText("Editor de código-fonte em C"), {
       target: { value: "int numero = 10;" }
     });
     fireEvent.click(screen.getByRole("button", { name: "Solicitar análise" }));

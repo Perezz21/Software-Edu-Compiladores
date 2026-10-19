@@ -12,20 +12,20 @@ describe("App", () => {
     render(<App />);
 
     expect(
-      screen.getByRole("heading", {
-        name: "Software Educacional para o Ensino de Compiladores"
-      })
+      screen.getByRole("heading", { name: "Laboratório de Compiladores" })
     ).toBeInTheDocument();
-    expect(screen.getByLabelText("Exemplos em C")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /Declaração de variável/i })
+    ).toBeInTheDocument();
     expect(screen.getByLabelText("Código-fonte em C")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Solicitar análise" })).toBeInTheDocument();
   });
 
-  it("carrega um exemplo selecionado na área de código", async () => {
+  it("carrega um exemplo na área de código", async () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await user.selectOptions(screen.getByLabelText("Exemplos em C"), "operacao");
+    await user.click(screen.getByRole("button", { name: /Operação aritmética/i }));
 
     expect(screen.getByLabelText("Código-fonte em C")).toHaveValue(
       "int resultado = 10 + 5;"
@@ -47,7 +47,8 @@ describe("App", () => {
       ok: true,
       json: async () => ({
         received: true,
-        message: "Código recebido com sucesso. As análises léxica e sintática serão disponibilizadas nas próximas etapas."
+        message:
+          "Código recebido com sucesso. As análises léxica e sintática serão disponibilizadas nas próximas etapas."
       })
     });
     vi.stubGlobal("fetch", fetchMock);

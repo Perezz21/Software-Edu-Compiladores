@@ -72,16 +72,24 @@ docker compose down
 
 ## Como usar a interface
 
-1. Escreva ou cole um pequeno trecho do subconjunto de C no campo **Código-fonte em C**.
-2. Opcionalmente, selecione um exemplo no campo **Exemplos em C**. O conteúdo pode ser editado depois de carregado.
+A página é organizada em três áreas:
+
+1. **Exemplos:** carrega um dos três programas disponíveis. O exemplo selecionado pode ser alterado depois.
+2. **Código-fonte em C:** permite escrever, colar ou editar o código que será enviado ao servidor.
+3. **Resultado:** apresenta mensagens de validação, confirmação de recebimento ou falhas de comunicação.
+
+Para usar:
+
+1. Escolha um exemplo ou escreva um trecho do subconjunto de C.
+2. Revise ou modifique o conteúdo no campo de código.
 3. Clique em **Solicitar análise**.
-4. A área **Resultado** mostrará uma confirmação ou uma mensagem de validação.
+4. Consulte a resposta na área **Resultado**.
 
 ### Exemplos disponíveis
 
 | Exemplo | Construção demonstrada |
 | --- | --- |
-| Declaração e inicialização | `int numero = 10;` |
+| Declaração de variável | `int numero = 10;` |
 | Operação aritmética | `int resultado = 10 + 5;` |
 | Expressão com parênteses | `int total = (10 + 5) * 2;` |
 

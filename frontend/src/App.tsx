@@ -1,14 +1,20 @@
 import { FormEvent, ReactNode, useState } from "react";
 
+type Token = { tipo: string; lexema: string; linha: number; coluna: number };
+type ErroLexico = {
+  tipo: "ERRO_LEXICO";
+  lexema: string;
+  linha: number;
+  coluna: number;
+  mensagem: string;
+};
 type ApiResponse = {
+  sucesso: boolean;
   message: string;
-  received: boolean;
+  tokens: Token[];
+  erros: ErroLexico[];
 };
-
-type Result = {
-  type: "info" | "success" | "error";
-  message: string;
-};
+type Result = { type: "info" | "success" | "error"; message: string };
 
 const apiUrl = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
 
@@ -28,23 +34,22 @@ const examples = [
     code: "int resultado = 10 + 5;"
   },
   {
-    id: "parenteses",
-    title: "Expressão com parênteses",
-    description: "Defina a ordem de uma expressão.",
+    id: "condicional",
+    title: "Comparação condicional",
+    description: "Observe operadores relacionais e delimitadores.",
     color: "example-dot--purple",
-    code: "int total = (10 + 5) * 2;"
+    code: "if (resultado >= 10) { return; }"
   }
 ];
 
 const tokenPattern =
-  /(\/\/[^\n]*|"(?:\\.|[^"\\])*"|#\s*include\b|\b(?:int|return)\b|\b\d+\b|[+\-*/=;(){}])/g;
+  /(\/\/[^\n]*|\b(?:int|if|else|while|return)\b|\b\d+\b|==|!=|<=|>=|&&|\|\||[+\-*/=!><;(),{}\[\]])/g;
 
 function getTokenClassName(token: string) {
   if (token.startsWith("//")) return "token-comment";
-  if (token.startsWith('"')) return "token-string";
-  if (token.startsWith("#")) return "token-directive";
-  if (/^(int|return)$/.test(token)) return "token-keyword";
+  if (/^(int|if|else|while|return)$/.test(token)) return "token-keyword";
   if (/^\d+$/.test(token)) return "token-number";
+  if (/^[(){}\[\],;]$/.test(token)) return "token-delimiter";
   return "token-operator";
 }
 
@@ -54,13 +59,9 @@ function highlightCode(code: string) {
 
   for (const match of code.matchAll(tokenPattern)) {
     const index = match.index ?? 0;
-
-    if (index > lastIndex) {
-      nodes.push(code.slice(lastIndex, index));
-    }
-
+    if (index > lastIndex) nodes.push(code.slice(lastIndex, index));
     nodes.push(
-      <span className={getTokenClassName(match[0])} key={`${index}-${match[0]}`}>
+      <span className={getTokenClassName(match[0])} key={String(index) + match[0]}>
         {match[0]}
       </span>
     );
@@ -71,6 +72,17 @@ function highlightCode(code: string) {
   return nodes;
 }
 
+function obterContagem(tokens: Token[]) {
+  return tokens.reduce<Record<string, number>>((contagem, token) => {
+    contagem[token.tipo] = (contagem[token.tipo] ?? 0) + 1;
+    return contagem;
+  }, {});
+}
+
+function formatarTipo(tipo: string) {
+  return tipo.toLowerCase().replaceAll("_", " ");
+}
+
 export default function App() {
   const [code, setCode] = useState("");
   const [selectedExample, setSelectedExample] = useState("");
@@ -79,18 +91,17 @@ export default function App() {
     type: "info",
     message: "Escolha um exemplo ou escreva um código C para começar."
   });
+  const [analysis, setAnalysis] = useState<ApiResponse | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const lineNumbers = Array.from({ length: code.split("\n").length }, (_, index) => index + 1);
 
   function loadExample(exampleId: string) {
     const example = examples.find((item) => item.id === exampleId);
-
-    if (!example) {
-      return;
-    }
+    if (!example) return;
 
     setSelectedExample(exampleId);
     setCode(example.code);
+    setAnalysis(null);
     setResult({
       type: "info",
       message: "Exemplo carregado. Você pode editá-lo antes de solicitar a análise."
@@ -101,30 +112,30 @@ export default function App() {
     event.preventDefault();
 
     if (code.trim().length === 0) {
-      setResult({
-        type: "error",
-        message: "Informe um código-fonte antes de solicitar a análise."
-      });
+      setAnalysis(null);
+      setResult({ type: "error", message: "Informe um código-fonte antes de solicitar a análise." });
       return;
     }
 
     setIsSubmitting(true);
-    setResult({ type: "info", message: "Enviando o código ao servidor..." });
+    setAnalysis(null);
+    setResult({ type: "info", message: "O scanner está identificando os tokens do código..." });
 
     try {
-      const response = await fetch(`${apiUrl}/api/analisar`, {
+      const response = await fetch(apiUrl + "/api/analisar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ codigo: code })
       });
       const data = (await response.json()) as ApiResponse;
 
-      if (!response.ok) {
-        setResult({ type: "error", message: data.message });
+      if (!Array.isArray(data.tokens) || !Array.isArray(data.erros)) {
+        setResult({ type: "error", message: data.message ?? "O servidor retornou uma resposta inválida." });
         return;
       }
 
-      setResult({ type: "success", message: data.message });
+      setAnalysis(data);
+      setResult({ type: data.sucesso ? "success" : "error", message: data.message });
     } catch {
       setResult({
         type: "error",
@@ -134,6 +145,8 @@ export default function App() {
       setIsSubmitting(false);
     }
   }
+
+  const contagem = analysis ? obterContagem(analysis.tokens) : {};
 
   return (
     <main className="workspace">
@@ -151,16 +164,15 @@ export default function App() {
             <h2 id="titulo-exemplos">Exemplos</h2>
             <p>Carregue um exemplo e modifique-o como quiser.</p>
           </div>
-
           <div className="example-list">
             {examples.map((example) => (
               <button
-                className={`example-row ${selectedExample === example.id ? "example-row--selected" : ""}`}
+                className={"example-row " + (selectedExample === example.id ? "example-row--selected" : "")}
                 type="button"
                 key={example.id}
                 onClick={() => loadExample(example.id)}
               >
-                <span className={`example-dot ${example.color}`} aria-hidden="true" />
+                <span className={"example-dot " + example.color} aria-hidden="true" />
                 <span>
                   <strong>{example.title}</strong>
                   <small>{example.description}</small>
@@ -175,26 +187,19 @@ export default function App() {
             <h2 id="titulo-codigo">Código-fonte em C</h2>
             <p>Escreva ou carregue um exemplo.</p>
           </div>
-
           <form onSubmit={submitCode}>
-            <label className="sr-only" htmlFor="code">
-              Editor de código-fonte em C
-            </label>
+            <label className="sr-only" htmlFor="code">Editor de código-fonte em C</label>
             <div className="code-editor">
               <div className="line-numbers" aria-hidden="true">
-                <div style={{ transform: `translateY(${-editorScroll.top}px)` }}>
-                  {lineNumbers.map((line) => (
-                    <span key={line}>{line}</span>
-                  ))}
+                <div style={{ transform: "translateY(" + -editorScroll.top + "px)" }}>
+                  {lineNumbers.map((line) => <span key={line}>{line}</span>)}
                 </div>
               </div>
               <div className="code-surface">
                 <pre
                   className="syntax-preview"
                   aria-hidden="true"
-                  style={{
-                    transform: `translate(${-editorScroll.left}px, ${-editorScroll.top}px)`
-                  }}
+                  style={{ transform: "translate(" + -editorScroll.left + "px, " + -editorScroll.top + "px)" }}
                 >
                   {highlightCode(code || " ")}
                 </pre>
@@ -203,12 +208,10 @@ export default function App() {
                   className="syntax-input"
                   value={code}
                   onChange={(event) => setCode(event.target.value)}
-                  onScroll={(event) =>
-                    setEditorScroll({
-                      left: event.currentTarget.scrollLeft,
-                      top: event.currentTarget.scrollTop
-                    })
-                  }
+                  onScroll={(event) => setEditorScroll({
+                    left: event.currentTarget.scrollLeft,
+                    top: event.currentTarget.scrollTop
+                  })}
                   placeholder="Exemplo: int numero = 10;"
                   spellCheck="false"
                   wrap="off"
@@ -218,29 +221,83 @@ export default function App() {
             </div>
 
             <p className="editor-note">
-              As cores são apenas um recurso visual do editor. Nesta etapa, o código é
-              recebido e validado; a análise léxica e sintática será desenvolvida nas
-              próximas etapas.
+              Ao solicitar a análise, o scanner identifica os lexemas e os classifica em
+              tokens. A análise sintática ainda será desenvolvida em uma próxima etapa.
             </p>
-
             <button className="primary-button" type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Enviando..." : "Solicitar análise"}
+              {isSubmitting ? "Analisando..." : "Analisar código"}
             </button>
           </form>
         </section>
 
-        <section
-          className={`panel result-panel result-panel--${result.type}`}
-          aria-labelledby="titulo-resultado"
-        >
+        <section className={"panel result-panel result-panel--" + result.type} aria-labelledby="titulo-resultado">
           <div className="panel-heading">
-            <h2 id="titulo-resultado">Resultado</h2>
-            <p>Retorno do processamento solicitado.</p>
+            <h2 id="titulo-resultado">Resultado da análise léxica</h2>
+            <p>Tokens, lexemas e possíveis erros encontrados pelo scanner.</p>
           </div>
-          <div className="result-content" role="status">
+          <div className="result-content" role="status" aria-live="polite">
             <span className="result-indicator" aria-hidden="true" />
             <p>{result.message}</p>
           </div>
+
+          {analysis && (
+            <div className="analysis-details">
+              <p className="analysis-explanation">
+                <strong>Token</strong> é uma categoria reconhecida pelo scanner, como identificador
+                ou operador. <strong>Lexema</strong> é o trecho exato de código que recebeu essa categoria.
+              </p>
+
+              <div className="analysis-summary" aria-label="Resumo dos tokens identificados">
+                <span>{analysis.tokens.length} token(s)</span>
+                <span>{analysis.erros.length} erro(s)</span>
+                {Object.entries(contagem).map(([tipo, quantidade]) => (
+                  <span key={tipo}>{quantidade} {formatarTipo(tipo)}</span>
+                ))}
+              </div>
+
+              {analysis.tokens.length > 0 && (
+                <section className="tokens-section" aria-labelledby="titulo-tokens">
+                  <h3 id="titulo-tokens">Tokens identificados</h3>
+                  <div className="table-wrapper">
+                    <table>
+                      <caption className="sr-only">Lista de tokens identificados pelo scanner</caption>
+                      <thead>
+                        <tr>
+                          <th scope="col">Tipo</th>
+                          <th scope="col">Lexema</th>
+                          <th scope="col">Linha</th>
+                          <th scope="col">Coluna</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {analysis.tokens.map((token, index) => (
+                          <tr key={String(token.linha) + "-" + String(token.coluna) + "-" + String(index)}>
+                            <td>{formatarTipo(token.tipo)}</td>
+                            <td><code>{token.lexema}</code></td>
+                            <td>{token.linha}</td>
+                            <td>{token.coluna}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </section>
+              )}
+
+              {analysis.erros.length > 0 && (
+                <section className="errors-section" aria-labelledby="titulo-erros">
+                  <h3 id="titulo-erros">Erros léxicos</h3>
+                  <ul>
+                    {analysis.erros.map((erro, index) => (
+                      <li key={String(erro.linha) + "-" + String(erro.coluna) + "-" + String(index)}>
+                        <strong>Linha {erro.linha}, coluna {erro.coluna}:</strong> {erro.mensagem}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
+            </div>
+          )}
         </section>
       </div>
     </main>

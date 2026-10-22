@@ -80,7 +80,7 @@ function obterContagem(tokens: Token[]) {
 }
 
 function formatarTipo(tipo: string) {
-  return tipo.toLowerCase().replaceAll("_", " ");
+  return tipo.toLowerCase().split("_").join(" ");
 }
 
 export default function App() {

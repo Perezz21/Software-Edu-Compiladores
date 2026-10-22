@@ -15,10 +15,10 @@ Este arquivo registra as execuções relevantes dos testes automatizados e das v
 
 | Data | Funcionalidade | Tipo de verificação | Comando ou ação | Resultado | Observações |
 | --- | --- | --- | --- | --- | --- |
-| 22/10/2026 | Scanner | Testes unitários | cd backend e npm test | Pendente | Deve validar palavras reservadas, identificadores, inteiros, comentários, operadores compostos, posições e erros léxicos. |
-| 22/10/2026 | API | Testes de endpoint | cd backend e npm test | Pendente | Deve validar retorno de tokens, retorno de erro léxico com HTTP 422, entrada vazia, campo ausente e regressão de /api/hello. |
-| 22/10/2026 | Interface | Testes de interface | cd frontend e npm test | Pendente | Deve validar tabela de tokens, apresentação de erros, exemplos, comunicação e numeração de linhas. |
-| 22/10/2026 | Frontend | Build de produção | cd frontend e npm run build | Pendente | Confirma a compilação TypeScript e o build do Vite. |
+| 22/10/2026 | Scanner | Testes unitários | cd backend e npm test | Aprovado | GitHub Actions validou palavras reservadas, identificadores, inteiros, comentários, operadores compostos, posições e erros léxicos. |
+| 22/10/2026 | API | Testes de endpoint | cd backend e npm test | Aprovado | GitHub Actions validou retorno de tokens, erro léxico com HTTP 422, entrada vazia, campo ausente e regressão de /api/hello. |
+| 22/10/2026 | Interface | Testes de interface | cd frontend e npm test | Aprovado | GitHub Actions executou 7 testes: tabela de tokens, erros, exemplos, comunicação, validação e numeração dinâmica. |
+| 22/10/2026 | Frontend | Build de produção | cd frontend e npm run build | Aprovado | GitHub Actions confirmou a compilação TypeScript e o build do Vite. |
 | 22/10/2026 | Aplicação completa | Docker Compose | docker compose up --build | Pendente | Inserir código válido e código com @; confirmar tokens, erros e comunicação entre serviços. |
 
 ## Validação local obrigatória

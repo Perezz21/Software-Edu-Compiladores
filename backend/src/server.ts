@@ -1,5 +1,6 @@
 import cors from "cors";
 import express from "express";
+import { analisarLexicamente } from "./scanner.js";
 
 export const app = express();
 
@@ -15,23 +16,32 @@ app.post("/api/analisar", (request, response) => {
 
   if (typeof codigo !== "string") {
     return response.status(400).json({
+      sucesso: false,
       message: "Envie o campo obrigatório \"codigo\" em formato de texto.",
-      received: false
+      tokens: [],
+      erros: []
     });
   }
 
   if (codigo.trim().length === 0) {
     return response.status(400).json({
+      sucesso: false,
       message: "Informe um código-fonte antes de solicitar a análise.",
-      received: false
+      tokens: [],
+      erros: []
     });
   }
 
-  return response.status(200).json({
-    message:
-      "Código recebido com sucesso. As análises léxica e sintática serão disponibilizadas nas próximas etapas.",
-    received: true,
-    codeLength: codigo.length
+  const resultado = analisarLexicamente(codigo);
+  const sucesso = resultado.erros.length === 0;
+
+  return response.status(sucesso ? 200 : 422).json({
+    sucesso,
+    message: sucesso
+      ? "Análise léxica concluída. Consulte os tokens identificados abaixo."
+      : "A análise encontrou erros léxicos. Corrija-os e tente novamente.",
+    tokens: resultado.tokens,
+    erros: resultado.erros
   });
 });
 

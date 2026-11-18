@@ -48,6 +48,13 @@ A AST utiliza nós com tipo, atributos, posições inicial/final e lista de filh
 
 A AST é exibida na interface como uma árvore expansível, permitindo explorar os nós e seus atributos. A análise semântica não é realizada nesta etapa.
 
+## Documentação da Etapa 4
+
+- [Gramática do subconjunto de C](docs/gramatica.md)
+- [Fluxograma do processamento](docs/fluxograma-etapa-4.md)
+- [Plano de testes](docs/plano-testes-etapa-4.md)
+- [Registro de testes e validações](docs/registro-testes.md)
+
 ## Tecnologias
 
 - Frontend: React + TypeScript + Vite

@@ -127,26 +127,30 @@ Corpo da requisição:
 { "codigo": "int numero = 10;" }
 ~~~
 
-Resposta para uma análise bem-sucedida (exemplo resumido):
+Resposta para uma análise bem-sucedida (exemplo para o código \`int x;\`):
 
 ~~~json
 {
   "sucesso": true,
   "message": "Análises léxica e sintática concluídas. Consulte os tokens e a AST.",
-  "tokens": [],
+  "tokens": [
+    { "tipo": "PALAVRA_RESERVADA", "lexema": "int", "linha": 1, "coluna": 1 },
+    { "tipo": "IDENTIFICADOR", "lexema": "x", "linha": 1, "coluna": 5 },
+    { "tipo": "DELIMITADOR", "lexema": ";", "linha": 1, "coluna": 6 }
+  ],
   "erros": [],
   "lexico": { "sucesso": true, "tokens": [], "erros": [] },
   "sintatico": {
     "sucesso": true,
     "executada": true,
     "ast": {
-      "tipo": "PROGRAMA",
-      "linha": 1,
-      "coluna": 1,
-      "linhaFinal": 1,
-      "colunaFinal": 16,
-      "atributos": {},
-      "filhos": []
+      "tipo": "PROGRAMA", "linha": 1, "coluna": 1,
+      "linhaFinal": 1, "colunaFinal": 6, "atributos": {},
+      "filhos": [{
+        "tipo": "DECLARACAO_VARIAVEL", "linha": 1, "coluna": 1,
+        "linhaFinal": 1, "colunaFinal": 6,
+        "atributos": { "tipoDado": "int", "nome": "x" }, "filhos": []
+      }]
     },
     "erros": []
   }

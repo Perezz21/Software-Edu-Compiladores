@@ -4,9 +4,9 @@ Aplicação web educacional para apoiar estudantes na compreensão das etapas in
 
 ## Objetivo da versão atual
 
-O estudante pode escrever, editar ou carregar um exemplo em C e solicitar a análise. O frontend envia o código ao backend; o scanner transforma os caracteres em tokens e a interface apresenta os resultados de modo didático.
+O estudante pode escrever, editar ou carregar um exemplo em C e solicitar a análise. O frontend envia o código ao backend; o scanner produz tokens, o parser verifica a estrutura gramatical e, quando a sintaxe é válida, constrói uma AST apresentada hierarquicamente na interface.
 
-A análise sintática ainda não está implementada. Nesta etapa, o sistema reconhece tokens válidos mesmo que o programa tenha erros de estrutura.
+A análise semântica e a tabela de símbolos permanecem fora do escopo desta etapa.
 
 ## Linguagem analisada: C
 
@@ -38,6 +38,16 @@ O scanner foi implementado em TypeScript no arquivo backend/src/scanner.ts, sem 
 
 A implementação manual é adequada ao objetivo educacional porque permite associar diretamente o código digitado pelo estudante à lista de tokens exibida pela aplicação.
 
+## Análise sintática e AST
+
+O parser está implementado em `backend/src/parser.ts` por meio de descida recursiva. Cada função representa um nível da gramática documentada em `docs/gramatica.md`. A precedência, da maior para a menor, é: operadores unários, multiplicação/divisão, adição/subtração, relacionais, igualdade, AND lógico e OR lógico. Operadores binários de um mesmo nível são associativos à esquerda.
+
+A AST utiliza nós com tipo, atributos, posições inicial/final e lista de filhos. São representadas declarações de variáveis inteiras, atribuições, blocos, condicionais `if/else`, repetição `while`, comandos `return`, identificadores, literais e expressões unárias/binárias.
+
+**Tratamento de erros:** o parser só é executado quando não há erros léxicos. Essa decisão evita analisar uma sequência de tokens incompleta ou ambígua. Erros léxicos e sintáticos são retornados separadamente. O parser informa o primeiro erro sintático encontrado e sua linha/coluna; recuperação para múltiplos erros sintáticos ainda não foi implementada.
+
+A AST é exibida na interface como uma árvore expansível, permitindo explorar os nós e seus atributos. A análise semântica não é realizada nesta etapa.
+
 ## Tecnologias
 
 - Frontend: React + TypeScript + Vite
@@ -50,8 +60,8 @@ A implementação manual é adequada ao objetivo educacional porque permite asso
 ~~~text
 Software-Edu-Compiladores/
 ├── frontend/          # Interface, exemplos e testes de interface
-├── backend/           # API, scanner e testes unitários
-├── docs/              # Registro das execuções de teste
+├── backend/           # API, scanner, parser, AST e testes unitários
+├── docs/              # Gramática, fluxograma e registro de testes
 ├── docker-compose.yml # Orquestra frontend e backend
 └── README.md
 ~~~
@@ -101,6 +111,7 @@ A numeração de linhas e a coloração do editor facilitam a leitura, mas a cla
 | Declaração de variável | int numero = 10; |
 | Operação aritmética | int resultado = 10 + 5; |
 | Comparação condicional | if (resultado >= 10) { return; } |
+| Repetição | int contador = 3; while (contador > 0) { contador = contador - 1; } |
 
 ## Comunicação entre frontend e backend
 
@@ -116,7 +127,7 @@ Corpo da requisição:
 { "codigo": "int numero = 10;" }
 ~~~
 
-Resposta para uma análise bem-sucedida:
+Resposta para uma análise bem-sucedida (trecho ilustrativo; a resposta completa inclui todos os tokens e a árvore):
 
 ~~~json
 {
@@ -140,7 +151,7 @@ Resposta para uma análise bem-sucedida:
 }
 ~~~
 
-Quando existem erros léxicos, o endpoint responde com HTTP 422, sucesso igual a false, os tokens reconhecidos e a lista de erros:
+Quando existem erros léxicos, o endpoint responde com HTTP 422, sucesso igual a false, os tokens reconhecidos e a lista de erros. Nesse caso, `sintatico.executada` será `false`, e o parser não será chamado. Quando a análise léxica termina sem erros, `sintatico.executada` será `true`; a propriedade `sintatico` conterá `sucesso`, `ast` e `erros` sintáticos. Se a sintaxe estiver incorreta, a API retorna HTTP 422 e `ast: null`.
 
 ~~~json
 {
@@ -167,7 +178,9 @@ Os testes cobrem:
 
 - scanner: palavras reservadas, identificadores, inteiros, operadores, delimitadores, comentários, posições e erros léxicos;
 - endpoint: retorno de tokens, retorno de erros, validação de entrada e regressão de /api/hello;
-- interface: exemplos, validação local, comunicação com backend, tabela de tokens, erros léxicos e numeração dinâmica;
+- parser: declarações, precedência e associatividade, comandos, blocos, AST e diagnósticos sintáticos;
+- endpoint: contrato de resposta para sucesso, erros léxicos, erros sintáticos e validação de entrada;
+- interface: exemplos, tabela de tokens, separação de erros, visualização da AST e numeração dinâmica;
 - regressão: os testes das Etapas 1 e 2 continuam incluídos.
 
 Execute os testes em terminais separados:
@@ -208,6 +221,7 @@ curl -X POST http://localhost:3000/api/analisar \
 ## Limitações conhecidas e próxima etapa
 
 - O sistema não executa programas em C.
-- Literais reais, strings e caracteres ainda não fazem parte do subconjunto.
-- A análise sintática, a árvore sintática e a análise semântica não foram implementadas.
-- A Etapa 4 utilizará os tokens produzidos aqui para validar a estrutura do programa.
+- Literais reais, strings, caracteres, funções, chamadas, parâmetros, `for`, vetores, ponteiros e pré-processador não fazem parte da gramática atual.
+- O parser reporta o primeiro erro sintático e não realiza recuperação para continuar a análise.
+- Não há análise semântica nem tabela de símbolos; essas funcionalidades pertencem à etapa seguinte.
+- A AST representa a estrutura sintática, mas não comprova que identificadores foram declarados ou que operações são semanticamente válidas.

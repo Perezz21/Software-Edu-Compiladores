@@ -127,27 +127,29 @@ Corpo da requisição:
 { "codigo": "int numero = 10;" }
 ~~~
 
-Resposta para uma análise bem-sucedida (trecho ilustrativo; a resposta completa inclui todos os tokens e a árvore):
+Resposta para uma análise bem-sucedida (exemplo resumido):
 
 ~~~json
 {
   "sucesso": true,
-  "message": "Análise léxica concluída. Consulte os tokens identificados abaixo.",
-  "tokens": [
-    {
-      "tipo": "PALAVRA_RESERVADA",
-      "lexema": "int",
+  "message": "Análises léxica e sintática concluídas. Consulte os tokens e a AST.",
+  "tokens": [],
+  "erros": [],
+  "lexico": { "sucesso": true, "tokens": [], "erros": [] },
+  "sintatico": {
+    "sucesso": true,
+    "executada": true,
+    "ast": {
+      "tipo": "PROGRAMA",
       "linha": 1,
-      "coluna": 1
+      "coluna": 1,
+      "linhaFinal": 1,
+      "colunaFinal": 16,
+      "atributos": {},
+      "filhos": []
     },
-    {
-      "tipo": "IDENTIFICADOR",
-      "lexema": "numero",
-      "linha": 1,
-      "coluna": 5
-    }
-  ],
-  "erros": []
+    "erros": []
+  }
 }
 ~~~
 

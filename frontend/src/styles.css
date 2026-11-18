@@ -496,3 +496,69 @@ td code {
     padding: 16px;
   }
 }
+
+
+.ast-section {
+  margin-top: 24px;
+}
+.ast-section h3 {
+  margin: 20px 0 8px;
+  color: #f3f4f6;
+  font-size: 0.98rem;
+}
+.ast-help {
+  color: #9ca3af;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+.ast-tree {
+  margin-top: 12px;
+  padding: 16px;
+  overflow-x: auto;
+  border: 1px solid #374151;
+  border-radius: 6px;
+  background: #111827;
+}
+.ast-tree ul {
+  margin: 0;
+  padding-left: 22px;
+  list-style: none;
+}
+.ast-tree > ul {
+  padding-left: 0;
+}
+.ast-node {
+  position: relative;
+  padding: 5px 0;
+  border-left: 1px solid #475569;
+}
+.ast-node details {
+  min-width: max-content;
+}
+.ast-node summary {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: fit-content;
+  padding: 5px 8px;
+  border-radius: 4px;
+  color: #d1d5db;
+  cursor: pointer;
+}
+.ast-node summary:hover {
+  background: #273548;
+}
+.ast-node-type {
+  color: #93c5fd;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+.ast-attributes {
+  color: #c4b5fd;
+  font-size: 0.78rem;
+}
+.ast-position {
+  color: #64748b;
+  font-size: 0.72rem;
+}

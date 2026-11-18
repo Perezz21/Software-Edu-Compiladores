@@ -27,7 +27,7 @@ Este arquivo registra as execuções relevantes dos testes automatizados e das v
 
 | Data | Componente | Comando | Resultado | Observações |
 | --- | --- | --- | --- | --- |
-| 18/11/2026 | Backend | `cd backend && npm test` | Aprovado | 18 testes aprovados em 3 arquivos: scanner (6), parser (7) e servidor/API (5). |
+| 18/11/2026 | Backend | `cd backend && npm test` | Aprovado | 22 testes aprovados em 3 arquivos: scanner (6), parser (11) e servidor/API (5). |
 | 18/11/2026 | Frontend | `cd frontend && npm test` | Aprovado | 8 testes aprovados em `App.test.tsx`, incluindo AST, erros léxicos/sintáticos e falha de comunicação. |
 
 ### Integração manual local

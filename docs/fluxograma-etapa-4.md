@@ -2,7 +2,7 @@
 
 O fluxograma representa o comportamento implementado nesta etapa. A análise semântica e a tabela de símbolos aparecem como atividades futuras, não executadas.
 
-\`\`\`mermaid
+```mermaid
 flowchart TD
     A[Entrada do código-fonte na interface] --> B[POST /api/analisar]
     B --> C[Validação da entrada]
@@ -22,7 +22,7 @@ flowchart TD
     N --> P[Etapa 5: análise semântica - futura]
     O --> P
     P -.-> Q[Tabela de símbolos e erros semânticos - futuros]
-\`\`\`
+```
 
 ## Estado das etapas
 
@@ -39,4 +39,4 @@ flowchart TD
 
 ## Contrato resumido entre frontend e backend
 
-A interface envia \`POST /api/analisar\` com \`{ "codigo": "..." }\`. O backend retorna \`sucesso\`, \`message\`, \`tokens\`, \`erros\`, \`lexico\` e \`sintatico\`. Os erros léxicos ficam em \`erros\`; os sintáticos em \`sintatico.erros\`. O campo \`sintatico.executada\` informa se o parser foi chamado. Quando executado com sucesso, \`sintatico.ast\` contém a árvore; diante de erro sintático, a AST é nula.
+A interface envia `POST /api/analisar` com `{ "codigo": "..." }`. O backend retorna `sucesso`, `message`, `tokens`, `erros`, `lexico` e `sintatico`. Os erros léxicos ficam em `erros`; os sintáticos em `sintatico.erros`. O campo `sintatico.executada` informa se o parser foi chamado. Quando executado com sucesso, `sintatico.ast` contém a árvore; diante de erro sintático, a AST é nula.

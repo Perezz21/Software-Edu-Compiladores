@@ -55,4 +55,40 @@ describe("analisarSintaticamente", () => {
     const resultado = analisar("int x = 4;");
     expect(resultado.ast?.filhos[0]).toMatchObject({ linha: 1, coluna: 1, linhaFinal: 1, colunaFinal: 10 });
   });
+
+  it("reconhece operador unário e mantém a precedência multiplicativa", () => {
+    const resultado = analisar("int x = -3 + 2 * 4;");
+    expect(resultado.sucesso).toBe(true);
+    expect(resultado.ast?.filhos[0].filhos[0]).toMatchObject({
+      tipo: "ADICAO",
+      filhos: [
+        { tipo: "NEGACAO_ARITMETICA" },
+        { tipo: "MULTIPLICACAO" }
+      ]
+    });
+  });
+
+  it("associa else ao if mais próximo e aceita bloco vazio", () => {
+    const resultado = analisar("if (x > 0) { if (x > 1) return; else return 0; } else {}");
+    expect(resultado.sucesso).toBe(true);
+    const condicionalExterno = resultado.ast?.filhos[0];
+    expect(condicionalExterno).toMatchObject({ tipo: "CONDICIONAL", atributos: { possuiSenao: true } });
+    expect(condicionalExterno?.filhos[1].filhos[0]).toMatchObject({
+      tipo: "CONDICIONAL",
+      atributos: { possuiSenao: true }
+    });
+    expect(condicionalExterno?.filhos[2]).toMatchObject({ tipo: "BLOCO", filhos: [] });
+  });
+
+  it("informa chave de fechamento ausente", () => {
+    const resultado = analisar("while (x > 0) { x = x - 1;");
+    expect(resultado.sucesso).toBe(false);
+    expect(resultado.erros[0].esperado).toEqual(["}"]);
+  });
+
+  it("localiza token inesperado depois de um comando completo", () => {
+    const resultado = analisar("int x = 1; else");
+    expect(resultado.sucesso).toBe(false);
+    expect(resultado.erros[0].encontrado).toBe("'else'");
+  });
 });

@@ -1,6 +1,6 @@
 # Software Educacional para o Ensino de Compiladores
 
-Aplicação web educacional para apoiar estudantes na compreensão das etapas iniciais de compilação. A versão atual implementa a análise léxica de pequenos trechos de C: o scanner lê o código, identifica tokens e informa erros com linha e coluna.
+Aplicação web educacional para apoiar estudantes na compreensão das etapas iniciais de compilação. A versão desta etapa implementa análise léxica, análise sintática descendente recursiva e construção de uma Árvore Sintática Abstrata (AST) para um subconjunto didático de C.
 
 ## Objetivo da versão atual
 

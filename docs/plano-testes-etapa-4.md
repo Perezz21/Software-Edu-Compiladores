@@ -31,7 +31,7 @@ Verificar se o parser reconhece as construções descritas em `gramatica.md`, co
 | P09 | Campo `codigo` ausente ou texto vazio | HTTP 400 (coberto pelo teste de integração da API) |
 | P10 | Interface recebe AST válida | Árvore expansível apresentada (coberto pelos testes de interface) |
 | P11 | Interface recebe erro sintático | Seção de erros sintáticos apresentada separadamente (coberto pelos testes de interface) |
-| P12 | `int x = -3 + 2 * 4;` | Operador unário reconhecido; multiplicação precede adição — automatizado e aprovado |
+| P12 | `int x = -3 + 2 * 4;` | Operador unário reconhecido; multiplicação precede adição — coberto por teste automatizado |
 | P13 | Condicionais aninhadas com `else` e bloco vazio | Associação do `else` ao `if` mais próximo e bloco vazio aceito — automatizado e aprovado |
 | P14 | Bloco sem chave de fechamento | Erro sintático esperando `}` — automatizado e aprovado |
 | P15 | Token inesperado após comando completo | Erro sintático localizado — automatizado e aprovado |
@@ -72,6 +72,6 @@ Acesse `http://localhost:5173` e teste os cenários válidos e inválidos. A exe
 
 Os resultados reais, data, ambiente e eventuais falhas devem ser registrados em `registro-testes.md`. Os casos descritos como automatizados só devem ser considerados aprovados após execução local ou CI confirmada.
 
-## Avaliação com participantes
+## Avaliação com participantes (se exigida)
 
-A avaliação por pares deve ser realizada após a versão integrada estar executável. Convidar estudantes de Ciência da Computação ou Inteligência Artificial que já cursaram ou estejam cursando Compiladores. Solicitar que executem tarefas: carregar exemplo, alterar código, analisar caso válido, provocar erro léxico e sintático e explorar a AST. Aplicar escala Likert de cinco pontos sobre clareza das mensagens, facilidade de uso, compreensão da árvore, utilidade didática e organização da interface, além de perguntas abertas sobre dificuldades e melhorias. A avaliação não deve ser declarada realizada antes da coleta das respostas.
+Não há registro de coleta de respostas ou avaliação com participantes nesta versão. Caso o enunciado exija essa atividade, ela deve ser realizada e documentada após a versão integrada estar executável. Convidar estudantes de Ciência da Computação ou Inteligência Artificial que já cursaram ou estejam cursando Compiladores. Solicitar que executem tarefas: carregar exemplo, alterar código, analisar caso válido, provocar erro léxico e sintático e explorar a AST. Aplicar escala Likert de cinco pontos sobre clareza das mensagens, facilidade de uso, compreensão da árvore, utilidade didática e organização da interface, além de perguntas abertas sobre dificuldades e melhorias. A avaliação não deve ser declarada realizada antes da coleta das respostas.

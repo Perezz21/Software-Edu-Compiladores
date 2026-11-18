@@ -139,7 +139,11 @@ Resposta para uma análise bem-sucedida (exemplo para o código \`int x;\`):
     { "tipo": "DELIMITADOR", "lexema": ";", "linha": 1, "coluna": 6 }
   ],
   "erros": [],
-  "lexico": { "sucesso": true, "tokens": [], "erros": [] },
+  "lexico": { "sucesso": true, "tokens": [
+    { "tipo": "PALAVRA_RESERVADA", "lexema": "int", "linha": 1, "coluna": 1 },
+    { "tipo": "IDENTIFICADOR", "lexema": "x", "linha": 1, "coluna": 5 },
+    { "tipo": "DELIMITADOR", "lexema": ";", "linha": 1, "coluna": 6 }
+  ], "erros": [] },
   "sintatico": {
     "sucesso": true,
     "executada": true,

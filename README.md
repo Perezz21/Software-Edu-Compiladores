@@ -100,7 +100,7 @@ docker compose down
 2. Edite o código livremente no editor.
 3. Clique em Analisar código.
 4. Leia a explicação de token e lexema, a contagem por categoria e a tabela gerada.
-5. Caso existam erros, consulte a seção de erros léxicos, que informa linha, coluna e uma orientação de correção.
+5. Se a análise léxica e sintática for válida, explore a AST hierárquica, expandindo os nós para consultar tipos, atributos e posições.\n6. Caso existam erros, consulte a seção correspondente: erros léxicos e sintáticos são apresentados separadamente, com localização e orientação de correção.
 
 A numeração de linhas e a coloração do editor facilitam a leitura, mas a classificação exibida nos resultados é produzida pelo scanner do backend.
 
@@ -166,7 +166,7 @@ Quando existem erros léxicos, o endpoint responde com HTTP 422, sucesso igual a
 ~~~json
 {
   "sucesso": false,
-  "message": "A análise encontrou erros léxicos. Corrija-os e tente novamente.",
+  "message": "A análise encontrou erros léxicos. A análise sintática não foi executada.",
   "tokens": [],
   "erros": [
     {
@@ -208,7 +208,7 @@ npm test
 npm run build
 ~~~
 
-Registre as execuções em docs/registro-testes.md.
+Consulte `docs/plano-testes-etapa-4.md` para os cenários sintáticos e `docs/registro-testes.md` para os resultados registrados. O fluxograma do processamento está em `docs/fluxograma-etapa-4.md`.
 
 ## Teste manual da API
 

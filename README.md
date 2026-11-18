@@ -51,7 +51,8 @@ A AST é exibida na interface como uma árvore expansível, permitindo explorar 
 ## Documentação da Etapa 4
 
 - [Gramática do subconjunto de C](docs/gramatica.md)
-- [Fluxograma do processamento (documentação)](docs/fluxograma-etapa-4.md)\n- [Fluxograma em SVG para o artigo](docs/fluxograma-etapa-4.svg)
+- [Fluxograma do processamento (documentação)](docs/fluxograma-etapa-4.md)
+- [Fluxograma em SVG para o artigo](docs/fluxograma-etapa-4.svg)
 - [Plano de testes](docs/plano-testes-etapa-4.md)
 - [Registro de testes e validações](docs/registro-testes.md)
 

@@ -163,13 +163,13 @@ class Parser {
     return esquerda;
   }
 
-  private no(tipo: string, inicio: Token, fim: Token,
+  private no(tipo: string, inicio: Token | NoAST, fim: Token | NoAST,
     atributos: Record<string, string | number | boolean | null>, filhos: NoAST[]): NoAST {
-    return {
-      tipo, linha: inicio.linha, coluna: inicio.coluna,
-      linhaFinal: fim.linha, colunaFinal: fim.coluna + fim.lexema.length - 1,
-      atributos, filhos
-    };
+    const linhaInicial = inicio.linha;
+    const colunaInicial = inicio.coluna;
+    const linhaFinal = "linhaFinal" in fim ? fim.linhaFinal : fim.linha;
+    const colunaFinal = "colunaFinal" in fim ? fim.colunaFinal : fim.coluna + fim.lexema.length - 1;
+    return { tipo, linha: linhaInicial, coluna: colunaInicial, linhaFinal, colunaFinal, atributos, filhos };
   }
 
   private consumir(lexema: string): Token {

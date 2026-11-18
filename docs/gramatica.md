@@ -1,10 +1,10 @@
 # Gramática do subconjunto de C
 
-O símbolo inicial é programa. O parser é descendente recursivo, implementado manualmente em TypeScript.
+O símbolo inicial é `programa`. O parser é descendente recursivo, implementado manualmente em TypeScript.
 
 ## EBNF
 
-\`\`\`ebnf
+```ebnf
 programa       = { declaracao | comando } ;
 declaracao     = "int", IDENTIFICADOR, [ "=", expressao ], ";" ;
 comando        = bloco | atribuicao | condicional | repeticao | retorno ;
@@ -22,11 +22,11 @@ aditiva        = multiplicativa, { ("+" | "-"), multiplicativa } ;
 multiplicativa = unaria, { ("*" | "/"), unaria } ;
 unaria         = ("!" | "-"), unaria | primaria ;
 primaria       = IDENTIFICADOR | LITERAL_INTEIRO | "(", expressao, ")" ;
-\`\`\`
+```
 
 ## Terminais
 
-Palavras reservadas: int, if, else, while e return. Identificadores e literais inteiros são fornecidos pelo scanner. Operadores: +, -, *, /, =, >, <, !, ==, !=, <=, >=, && e ||. Delimitadores usados: parênteses, chaves e ponto e vírgula.
+Palavras reservadas: `int`, `if`, `else`, `while` e `return`. Identificadores e literais inteiros são fornecidos pelo scanner. Operadores: `+`, `-`, `*`, `/`, `=`, `>`, `<`, `!`, `==`, `!=`, `<=`, `>=`, `&&` e `||`. Delimitadores usados: parênteses, chaves e ponto e vírgula.
 
 ## Precedência
 
@@ -34,14 +34,17 @@ Da maior para a menor: operadores unários; multiplicação/divisão; adição/s
 
 ## Limites do subconjunto
 
-Não são contemplados tipos diferentes de int, literais reais, strings, caracteres, declarações e chamadas de função, parâmetros, for, vetores, ponteiros, atribuições compostas ou pré-processador. A análise semântica não integra esta etapa.
+Não são contemplados tipos diferentes de `int`, literais reais, strings, caracteres, declarações e chamadas de função, parâmetros, `for`, vetores, ponteiros, atribuições compostas ou pré-processador. A análise semântica não integra esta etapa.
 
 ## Exemplos para validação
 
-Válido: int resultado = 10 + 5 * 2;
-Válido: if (resultado >= 20) { resultado = resultado - 1; } else { return; }
-Inválido: int numero = 10
-Inválido: if (numero > 0 { return; }
+Válido: `int resultado = 10 + 5 * 2;`
+
+Válido: `if (resultado >= 20) { resultado = resultado - 1; } else { return; }`
+
+Inválido: `int numero = 10` (ponto e vírgula ausente).
+
+Inválido: `if (numero > 0 { return; }` (parêntese de fechamento ausente).
 
 ## Decisão sobre erros léxicos
 

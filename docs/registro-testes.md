@@ -49,10 +49,8 @@ Este arquivo registra as execuções relevantes dos testes automatizados e das v
 | --- | --- | --- | --- | --- |
 | 18/11/2026 | Testes automatizados — execução associada ao commit da Etapa 4 | Testes e verificação TypeScript aprovados | Testes e build aprovados | Aprovado |
 
-### Verificações ainda pendentes
+### Observação sobre avaliação com participantes
 
-- Executar e registrar os casos adicionais de borda P12 a P15 descritos em `plano-testes-etapa-4.md`.
-- Executar `docker compose up --build` na versão atual da Etapa 4, caso o ambiente Docker esteja disponível.
-- Realizar avaliação com participantes somente se essa atividade fizer parte da entrega solicitada; não presumir que foi realizada.
+Não há registro de coleta de respostas ou avaliação com participantes nesta versão. Essa atividade deve ser realizada somente se estiver explicitamente exigida no enunciado; não deve ser declarada como concluída sem evidências.
 
 **Nota:** os testes automatizados, a integração manual nos servidores de desenvolvimento e a integração em Docker são verificações distintas. O CI confirmou os testes do backend, a verificação TypeScript, os testes do frontend e o build. A avaliação com participantes não está registrada.

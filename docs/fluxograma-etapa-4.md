@@ -1,6 +1,6 @@
 # Fluxograma da análise do código-fonte
 
-O fluxograma representa o comportamento implementado nesta etapa. A análise semântica e a tabela de símbolos aparecem como atividades futuras, não executadas.
+O fluxograma representa o comportamento implementado nesta etapa. A versão vetorial para inclusão no artigo está disponível em [`fluxograma-etapa-4.svg`](fluxograma-etapa-4.svg) e é exibida a seguir.\n\n![Fluxograma atualizado da análise do código-fonte](fluxograma-etapa-4.svg) A análise semântica e a tabela de símbolos aparecem como atividades futuras, não executadas.
 
 ```mermaid
 flowchart TD

@@ -58,3 +58,17 @@ Para encerrar:
 ~~~bash
 docker compose down
 ~~~
+
+
+## Etapa 4 — Análise sintática e AST
+
+| Data | Funcionalidade | Tipo de verificação | Comando ou ação | Resultado | Observações |
+| --- | --- | --- | --- | --- | --- |
+| A executar | Parser | Testes unitários | \`cd backend && npm test\` | Pendente | Foram adicionados casos para precedência, associatividade, comandos, AST e erros sintáticos. A execução precisa ser confirmada. |
+| A executar | Backend | Verificação TypeScript | \`cd backend && npx tsc --noEmit\` | Pendente | Verificar tipos do parser e do contrato atualizado da API. |
+| A executar | API | Testes de integração | \`cd backend && npm test\` | Pendente | Verificar HTTP 200 para AST válida, HTTP 422 para erro sintático e bloqueio do parser após erro léxico. |
+| A executar | Interface | Testes de interface | \`cd frontend && npm test\` | Pendente | Verificar árvore expansível, separação dos erros e comportamento existente. |
+| A executar | Frontend | Build | \`cd frontend && npm run build\` | Pendente | Verificar compilação TypeScript e Vite. |
+| A executar | Aplicação completa | Docker Compose | \`docker compose up --build\` | Pendente | Testar exemplos válidos, erro léxico, erro sintático e visualização da AST no navegador. |
+
+**Importante:** os casos automatizados foram escritos nesta etapa, mas ainda não devem ser apresentados como aprovados até que os comandos sejam executados e os resultados confirmados. Consulte também \`plano-testes-etapa-4.md\` e \`fluxograma-etapa-4.md\`.

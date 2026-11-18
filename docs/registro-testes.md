@@ -19,7 +19,7 @@ Este arquivo registra as execuções relevantes dos testes automatizados e das v
 | 22/10/2026 | API | Testes de endpoint | `cd backend` e `npm test` | Aprovado | GitHub Actions validou retorno de tokens, erro léxico com HTTP 422, entrada vazia, campo ausente e regressão de `/api/hello`. |
 | 22/10/2026 | Interface | Testes de interface | `cd frontend` e `npm test` | Aprovado | GitHub Actions executou 7 testes: tabela de tokens, erros, exemplos, comunicação, validação e numeração dinâmica. |
 | 22/10/2026 | Frontend | Build de produção | `cd frontend` e `npm run build` | Aprovado | GitHub Actions confirmou a compilação TypeScript e o build do Vite. |
-| 22/10/2026 | Aplicação completa | Docker Compose | `docker compose up --build` | Pendente | A execução integrada por Docker precisa ser registrada separadamente. |
+| 22/10/2026 | Aplicação completa | Docker Compose | `docker compose up --build` | Aprovado | Reconstrução e execução integradas registradas na etapa anterior. |
 
 ## Etapa 4 — Análise sintática e AST
 
@@ -41,7 +41,7 @@ Este arquivo registra as execuções relevantes dos testes automatizados e das v
 | 18/11/2026 | Erro léxico | `int numero = 10 @ 5;` no navegador | Aprovado | Caractere inválido identificado; parser não executado. |
 | 18/11/2026 | Precedência aritmética | `int resultado = 10 + 5 * 2;` no navegador | Aprovado | AST representa multiplicação como subárvore da adição. |
 | 18/11/2026 | Condicional | Exemplo com `if/else` no navegador | Aprovado | Condição, blocos e atribuições representados na AST. |
-| 18/11/2026 | Repetição | Exemplo com `while` no navegador | Aprovado | Condição, bloco e atribuição representados na AST. |
+| 18/11/2026 | Repetição | Exemplo com `while` no navegador | Aprovado | Condição, bloco e atribuição representados na AST. |\n| 18/11/2026 | Integração Docker da Etapa 4 | `docker compose down` e `docker compose up --build` | Aprovado | Imagens reconstruídas com `npm ci`; backend iniciou e ficou saudável; frontend Vite ficou disponível. Casos válido e inválido foram retestados nos contêineres. |
 
 ### Integração contínua (GitHub Actions)
 
@@ -55,4 +55,4 @@ Este arquivo registra as execuções relevantes dos testes automatizados e das v
 - Executar `docker compose up --build` na versão atual da Etapa 4, caso o ambiente Docker esteja disponível.
 - Realizar avaliação com participantes somente se essa atividade fizer parte da entrega solicitada; não presumir que foi realizada.
 
-**Nota:** os testes automatizados e a integração manual local foram realizados em ambientes distintos. O teste manual utilizou os servidores de desenvolvimento Node/Vite, sem Docker. A execução de CI confirmou os testes do backend, a verificação TypeScript, os testes do frontend e o build.
+**Nota:** os testes automatizados, a integração manual nos servidores de desenvolvimento e a integração em Docker são verificações distintas. O CI confirmou os testes do backend, a verificação TypeScript, os testes do frontend e o build. A avaliação com participantes não está registrada.

@@ -1,60 +1,56 @@
 # Registro de testes
 
-Este arquivo registra as execuções relevantes dos testes automatizados e das verificações da aplicação.
+Este arquivo registra as execuções relevantes dos testes automatizados e das verificações da aplicação. Resultados automatizados e verificações manuais são identificados separadamente.
 
 ## Etapa 2 — Interface e entrada de código-fonte
 
 | Data | Funcionalidade | Tipo de verificação | Comando ou ação | Resultado | Observações |
 | --- | --- | --- | --- | --- | --- |
-| 19/10/2026 | Frontend | Testes de interface | npm test | Aprovado | 6 testes aprovados: tela, seleção de exemplo, entrada vazia, envio ao backend, falha de comunicação e numeração dinâmica de linhas. |
-| 19/10/2026 | Frontend | Build | npm run build | Aprovado | Compilação TypeScript e build Vite concluídos. |
-| 19/10/2026 | Backend | Testes de endpoint e TypeScript | npm test e npx tsc --noEmit | Aprovado | 4 testes aprovados: envio válido, entrada vazia, campo ausente e regressão de /api/hello. |
-| 19/10/2026 | Aplicação completa | Docker Compose | docker compose up --build | Aprovado | Frontend acessível em http://localhost:5173; exemplos, edição do código e envio ao backend verificados. |
+| 19/10/2026 | Frontend | Testes de interface | `npm test` | Aprovado | 6 testes aprovados: tela, seleção de exemplo, entrada vazia, envio ao backend, falha de comunicação e numeração dinâmica de linhas. |
+| 19/10/2026 | Frontend | Build | `npm run build` | Aprovado | Compilação TypeScript e build Vite concluídos. |
+| 19/10/2026 | Backend | Testes de endpoint e TypeScript | `npm test` e `npx tsc --noEmit` | Aprovado | 4 testes aprovados: envio válido, entrada vazia, campo ausente e regressão de `/api/hello`. |
+| 19/10/2026 | Aplicação completa | Docker Compose | `docker compose up --build` | Aprovado | Frontend acessível em `http://localhost:5173`; exemplos, edição do código e envio ao backend verificados. |
 
 ## Etapa 3 — Análise léxica
 
 | Data | Funcionalidade | Tipo de verificação | Comando ou ação | Resultado | Observações |
 | --- | --- | --- | --- | --- | --- |
-| 22/10/2026 | Scanner | Testes unitários | cd backend e npm test | Aprovado | GitHub Actions validou palavras reservadas, identificadores, inteiros, comentários, operadores compostos, posições e erros léxicos. |
-| 22/10/2026 | API | Testes de endpoint | cd backend e npm test | Aprovado | GitHub Actions validou retorno de tokens, erro léxico com HTTP 422, entrada vazia, campo ausente e regressão de /api/hello. |
-| 22/10/2026 | Interface | Testes de interface | cd frontend e npm test | Aprovado | GitHub Actions executou 7 testes: tabela de tokens, erros, exemplos, comunicação, validação e numeração dinâmica. |
-| 22/10/2026 | Frontend | Build de produção | cd frontend e npm run build | Aprovado | GitHub Actions confirmou a compilação TypeScript e o build do Vite. |
-| 22/10/2026 | Aplicação completa | Docker Compose | docker compose up --build | Pendente | Inserir código válido e código com @; confirmar tokens, erros e comunicação entre serviços. |
+| 22/10/2026 | Scanner | Testes unitários | `cd backend` e `npm test` | Aprovado | GitHub Actions validou palavras reservadas, identificadores, inteiros, comentários, operadores compostos, posições e erros léxicos. |
+| 22/10/2026 | API | Testes de endpoint | `cd backend` e `npm test` | Aprovado | GitHub Actions validou retorno de tokens, erro léxico com HTTP 422, entrada vazia, campo ausente e regressão de `/api/hello`. |
+| 22/10/2026 | Interface | Testes de interface | `cd frontend` e `npm test` | Aprovado | GitHub Actions executou 7 testes: tabela de tokens, erros, exemplos, comunicação, validação e numeração dinâmica. |
+| 22/10/2026 | Frontend | Build de produção | `cd frontend` e `npm run build` | Aprovado | GitHub Actions confirmou a compilação TypeScript e o build do Vite. |
+| 22/10/2026 | Aplicação completa | Docker Compose | `docker compose up --build` | Aprovado | Reconstrução e execução integradas registradas na etapa anterior. |
 
-## Validação local obrigatória
+## Etapa 4 — Análise sintática e AST
 
-Antes da entrega, execute os comandos documentados e substitua Pendente por Aprovado ou Reprovado. Não registre um resultado como aprovado sem executar o comando correspondente.
+### Testes automatizados locais
 
-Sequência recomendada:
+| Data | Componente | Comando | Resultado | Observações |
+| --- | --- | --- | --- | --- |
+| 18/11/2026 | Backend | `cd backend && npm test` | Aprovado | 22 testes aprovados em 3 arquivos: scanner (6), parser (11) e servidor/API (5). |
+| 18/11/2026 | Frontend | `cd frontend && npm test` | Aprovado | 8 testes aprovados em `App.test.tsx`, incluindo AST, erros léxicos/sintáticos e falha de comunicação. |
 
-~~~bash
-cd backend
-npm install
-npm test
-~~~
+### Integração manual local
 
-~~~bash
-cd frontend
-npm install
-npm test
-npm run build
-~~~
+| Data | Cenário | Ambiente/ação | Resultado | Observações |
+| --- | --- | --- | --- | --- |
+| 18/11/2026 | Inicialização do backend | `npm run dev` em terminal próprio | Aprovado | Servidor disponível em `http://localhost:3000`. |
+| 18/11/2026 | Inicialização do frontend | `npm run dev` em terminal próprio | Aprovado | Vite disponível em `http://localhost:5173`. |
+| 18/11/2026 | Declaração simples | `int numero = 10;` no navegador | Aprovado | Tokens e AST exibidos. |
+| 18/11/2026 | Erro sintático | `int numero = ;` no navegador | Aprovado | Erro sintático apresentado separadamente. |
+| 18/11/2026 | Erro léxico | `int numero = 10 @ 5;` no navegador | Aprovado | Caractere inválido identificado; parser não executado. |
+| 18/11/2026 | Precedência aritmética | `int resultado = 10 + 5 * 2;` no navegador | Aprovado | AST representa multiplicação como subárvore da adição. |
+| 18/11/2026 | Condicional | Exemplo com `if/else` no navegador | Aprovado | Condição, blocos e atribuições representados na AST. |
+| 18/11/2026 | Repetição | Exemplo com `while` no navegador | Aprovado | Condição, bloco e atribuição representados na AST. |\n| 18/11/2026 | Integração Docker da Etapa 4 | `docker compose down` e `docker compose up --build` | Aprovado | Imagens reconstruídas com `npm ci`; backend iniciou e ficou saudável; frontend Vite ficou disponível. Casos válido e inválido foram retestados nos contêineres. |
 
-Na raiz do projeto:
+### Integração contínua (GitHub Actions)
 
-~~~bash
-docker compose up --build
-~~~
+| Data | Workflow | Backend | Frontend | Resultado |
+| --- | --- | --- | --- | --- |
+| 18/11/2026 | Testes automatizados — execução associada ao commit da Etapa 4 | Testes e verificação TypeScript aprovados | Testes e build aprovados | Aprovado |
 
-No navegador, abra http://localhost:5173 e valide:
+### Observação sobre avaliação com participantes
 
-1. um exemplo válido, como int numero = 10;;
-2. um caractere inválido, como int @numero = 10;;
-3. um comentário de bloco não fechado;
-4. a continuidade da numeração de linhas e dos exemplos.
+Não há registro de coleta de respostas ou avaliação com participantes nesta versão. Essa atividade deve ser realizada somente se estiver explicitamente exigida no enunciado; não deve ser declarada como concluída sem evidências.
 
-Para encerrar:
-
-~~~bash
-docker compose down
-~~~
+**Nota:** os testes automatizados, a integração manual nos servidores de desenvolvimento e a integração em Docker são verificações distintas. O CI confirmou os testes do backend, a verificação TypeScript, os testes do frontend e o build. A avaliação com participantes não está registrada.

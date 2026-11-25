@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1120" viewBox="0 0 1200 1120" role="img" aria-labelledby="title desc">
+<title id="title">Fluxograma do processamento do código-fonte</title>
+<desc id="desc">Fluxo implementado de entrada, validação, análise léxica, análise sintática, construção da AST e apresentação dos resultados. Erros léxicos impedem a execução do parser. Análise semântica e tabela de símbolos são futuras.</desc>
+<defs>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#334155"/></marker>
+  <style>
+    .node{fill:#e8f1fb;stroke:#245b8f;stroke-width:2.5}
+    .decision{fill:#fff4d6;stroke:#a66b00;stroke-width:2.5}
+    .future{fill:#f1f5f9;stroke:#64748b;stroke-width:2.5;stroke-dasharray:9 7}
+    .error{fill:#fff0f0;stroke:#b42318;stroke-width:2.5}
+    .line{fill:none;stroke:#334155;stroke-width:2.5;marker-end:url(#arrow)}
+    .label{font: 22px Arial,sans-serif;fill:#172b4d;text-anchor:middle}
+    .small{font:18px Arial,sans-serif;fill:#334155;text-anchor:middle}
+    .status{font:bold 16px Arial,sans-serif;fill:#245b8f;text-anchor:middle}
+    .futuretext{font:bold 16px Arial,sans-serif;fill:#64748b;text-anchor:middle}
+  </style>
+</defs>
+<rect width="1200" height="1120" fill="#ffffff"/>
+<text x="600" y="48" class="label" style="font-weight:bold;font-size:30px">Fluxo de análise do código-fonte</text>
+<rect x="400" y="82" width="400" height="76" rx="14" class="node"/>
+<text x="600" y="113" class="label">Entrada de código na interface</text><text x="600" y="140" class="status">IMPLEMENTADO</text>
+<path d="M600 158 V196" class="line"/>
+<rect x="400" y="198" width="400" height="76" rx="14" class="node"/>
+<text x="600" y="229" class="label">Validação e POST /api/analisar</text><text x="600" y="256" class="status">IMPLEMENTADO</text>
+<path d="M600 274 V312" class="line"/>
+<rect x="400" y="314" width="400" height="76" rx="14" class="node"/>
+<text x="600" y="345" class="label">Scanner — análise léxica</text><text x="600" y="372" class="status">IMPLEMENTADO</text>
+<path d="M600 390 V430" class="line"/>
+<polygon points="600,430 770,500 600,570 430,500" class="decision"/>
+<text x="600" y="493" class="label">Existem erros</text><text x="600" y="520" class="label">léxicos?</text>
+<path d="M430 500 H210 V610" class="line"/>
+<text x="305" y="482" class="small">SIM</text>
+<rect x="55" y="612" width="310" height="92" rx="14" class="error"/>
+<text x="210" y="647" class="label">Retornar tokens e</text><text x="210" y="675" class="label">erros léxicos</text>
+<path d="M210 704 V758" class="line"/>
+<rect x="55" y="760" width="310" height="76" rx="14" class="error"/>
+<text x="210" y="791" class="label">Parser não executado</text><text x="210" y="818" class="small">HTTP 422</text>
+<path d="M770 500 H990 V610" class="line"/>
+<text x="885" y="482" class="small">NÃO</text>
+<rect x="835" y="612" width="310" height="92" rx="14" class="node"/>
+<text x="990" y="647" class="label">Parser descendente</text><text x="990" y="675" class="status">IMPLEMENTADO</text>
+<path d="M990 704 V758" class="line"/>
+<polygon points="990,758 1145,820 990,882 835,820" class="decision"/>
+<text x="990" y="814" class="label">Sintaxe</text><text x="990" y="841" class="label">válida?</text>
+<path d="M835 820 H700 V930" class="line"/>
+<text x="755" y="800" class="small">NÃO</text>
+<rect x="540" y="932" width="320" height="82" rx="14" class="error"/>
+<text x="700" y="964" class="label">Retornar erro sintático</text><text x="700" y="991" class="small">HTTP 422; AST nula</text>
+<path d="M990 882 V930" class="line"/>
+<text x="1035" y="910" class="small">SIM</text>
+<rect x="875" y="932" width="270" height="82" rx="14" class="node"/>
+<text x="1010" y="964" class="label">Construir AST</text><text x="1010" y="991" class="status">IMPLEMENTADO</text>
+<path d="M210 836 V1050 H450" class="line"/>
+<path d="M700 1014 V1050 H600" class="line"/>
+<path d="M1010 1014 V1050 H750" class="line"/>
+<rect x="380" y="1052" width="440" height="58" rx="12" class="node"/>
+<text x="600" y="1088" class="label">Interface apresenta tokens, AST e erros separados</text>
+<rect x="30" y="880" width="300" height="80" rx="12" class="future"/>
+<text x="180" y="913" class="label">Etapa futura</text><text x="180" y="940" class="small">Análise semântica e tabela de símbolos</text>
+<text x="40" y="1090" class="futuretext" style="text-anchor:start">Tracejado = funcionalidade futura</text>
+</svg>

@@ -3,3 +3,10 @@ dist/
 .env
 .DS_Store
 npm-debug.log*
+
+# Arquivos auxiliares do TypeScript
+*.tsbuildinfo
+
+# Arquivos gerados pela compilação da configuração do Vite
+frontend/vite.config.js
+frontend/vite.config.d.ts
